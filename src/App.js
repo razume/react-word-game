@@ -1,24 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import faker from 'faker';
 import './App.css';
+import Stats from './components/Stats';
+import Words from './components/Words';
+import Buttons from './components/Buttons';
+
+const generateWord = type => {
+  const method =
+    type === 'noun' ? faker.company.bsNoun : faker.company.bsAdjective;
+  return {
+    type,
+    text: method()
+  };
+};
 
 function App() {
+  const [words, setWords] = useState([]);
+
+  const handleClick = type => {
+    const newWord = generateWord(type);
+    setWords([...words, newWord]);
+  };
+
+  console.log('generated noun:', generateWord('noun'));
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Stats words={words} />
+      <Buttons handleClick={handleClick} />
+      <Words words={words} />
     </div>
   );
 }
